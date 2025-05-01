@@ -2,43 +2,100 @@
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>新北市政府國家賠償事件求償權行使基準</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 40px; }
-        h1 { color: #2d5ca4; }
-        table { border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #aaa; padding: 8px 16px; text-align: center; }
-        th { background-color: #f0f6ff; }
-        input[type="number"] { width: 120px; padding: 5px; }
-        button { padding: 6px 20px; font-size: 16px; margin-top: 10px; }
-        #resultTable { margin-top: 30px; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        h1, h2 {
+            color: #2d5ca4;
+        }
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            min-width: 300px;
+        }
+        th, td {
+            border: 1px solid #aaa;
+            padding: 8px 16px;
+            text-align: center;
+        }
+        th {
+            background-color: #f0f6ff;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 8px 20px;
+            font-size: 16px;
+            margin-top: 10px;
+            background-color: #2d5ca4;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #1e3f7a;
+        }
+        p, ol {
+            line-height: 1.6;
+        }
     </style>
 </head>
 <body>
     <h1>新北市政府國家賠償事件求償權行使基準</h1>
 
-    <form id="calcForm" onsubmit="return false;">
-        <table>
+    <div class="table-container">
+        <form id="calcForm" onsubmit="return false;">
+            <table>
+                <tr>
+                    <th>賠償金額（元）</th>
+                    <td>
+                        <input type="number" id="amount" min="0" required>
+                    </td>
+                </tr>
+            </table>
+            <button type="button" onclick="calculate()">計算</button>
+        </form>
+    </div>
+
+    <div class="table-container">
+        <table id="resultTable" style="display:none;">
             <tr>
-                <th>賠償金額（元）</th>
-                <td>
-                    <input type="number" id="amount" min="0" required>
-                </td>
+                <th>輸入賠償金額（元）</th>
+                <th>應分擔求償額度（元）</th>
+            </tr>
+            <tr>
+                <td id="inputAmount"></td>
+                <td id="claimAmount"></td>
             </tr>
         </table>
-        <button type="button" onclick="calculate()">計算</button>
-    </form>
+    </div>
 
-    <table id="resultTable" style="display:none;">
-        <tr>
-            <th>輸入賠償金額（元）</th>
-            <th>應分擔求償額度（元）</th>
-        </tr>
-        <tr>
-            <td id="inputAmount"></td>
-            <td id="claimAmount"></td>
-        </tr>
-    </table>
+    <h2>依本規定第6條</h2>
+    <p>
+        公務員於執行職務行使公權力時，有重大過失致生國家賠償責任者，依下列分擔比例求償：
+    </p>
+    <ol>
+        <li>賠償費用總額在新臺幣20,000元以下者，分擔50％。</li>
+        <li>賠償費用總額超過20,000元至50,000元以下者，除20,000元部分依前款規定辦理外，餘額分擔30％。</li>
+        <li>賠償費用總額超過50,000元至200,000元以下者，除50,000元部分依前款規定辦理外，餘額分擔20％。</li>
+        <li>賠償費用總額超過200,000元者，除200,000元部分依前款規定辦理外，餘額分擔5％。</li>
+    </ol>
+    <p>
+        前項求償比例如因個案情節特殊，經考量前點各款事項後，仍顯失公平者，得就其分擔額再予酌增或酌減。但增減之額度不得超過原分擔額之50％。
+    </p>
 
     <script>
         function calculate() {
@@ -49,13 +106,9 @@
             }
 
             var claim = 0;
-            // 2萬元以內
             claim += Math.min(amt, 20000) * 0.5;
-            // 2萬~5萬元
             if (amt > 20000) claim += Math.min(amt - 20000, 30000) * 0.3;
-            // 5萬~20萬元
             if (amt > 50000) claim += Math.min(amt - 50000, 150000) * 0.2;
-            // 20萬元以上
             if (amt > 200000) claim += (amt - 200000) * 0.05;
 
             document.getElementById('inputAmount').innerText = amt.toLocaleString();
@@ -63,19 +116,5 @@
             document.getElementById('resultTable').style.display = '';
         }
     </script>
- <h2>新北市政府國家賠償事件求償權行使基準第6條</h2>
-<p>
-公務員於執行職務行使公權力時，有重大過失致生國家賠償責任者，依下列分擔比例求償：
-</p>
-<ol>
-  <li>賠償費用總額在新臺幣（以下同）20,000元以下者，分擔50%。</li>
-  <li>賠償費用總額超過20,000元至50,000元以下者，除20,000元部分依前款規定辦理外，餘額分擔30%。</li>
-  <li>賠償費用總額超過50,000元至200,000元以下者，除50,000元部分依前款規定辦理外，餘額分擔20%。</li>
-  <li>賠償費用總額超200,000元者，除200,000元部分依前款規定辦理外，餘額分擔5%。</li>
-</ol>
-<p>
-前項求償比例如因個案情節特殊，經考量前點各款事項後，仍顯失公平者，得就其分擔額再予酌增或酌減。但增減之額度不得超過原分擔額之1/2。
-</p>
-    
 </body>
 </html>
