@@ -31,6 +31,12 @@ th, td {
 th {
     background-color: #f0f6ff;
 }
+th small {
+    display: block;
+    font-size: 0.85em;
+    color: #555;
+    margin-top: 2px;
+}
 input[type="number"] {
     width: 100%;
     box-sizing: border-box;
@@ -59,12 +65,12 @@ button {
 
 <h1>新北市政府環境保護局<br>清潔隊車輛機具維修費用分攤處理計算表</h1>
 
-<!-- 金額 -->
+<!-- 維修金額 -->
 <div class="table-container">
 <table>
 <tr>
-<th>維修費用總額（元）</th>
-<td><input type="number" id="amount" min="0"></td>
+    <th>維修費用總額（元）</th>
+    <td><input type="number" id="amount" min="0"></td>
 </tr>
 </table>
 </div>
@@ -74,14 +80,18 @@ button {
 <div class="table-container">
 <table>
 <tr>
-<th>甲等</th><th>乙等</th><th>丙等</th><th>年數合計</th><th>考績調整小計</th>
+    <th>甲等<small>(-1%)</small></th>
+    <th>乙等<small>(+1%)</small></th>
+    <th>丙等<small>(+3%)</small></th>
+    <th>年數合計</th>
+    <th>考績調整小計</th>
 </tr>
 <tr>
-<td><input type="number" id="a" value="0"></td>
-<td><input type="number" id="b" value="0"></td>
-<td><input type="number" id="c" value="0"></td>
-<td id="yearSum">0</td>
-<td id="gradeRate">0%</td>
+    <td><input type="number" id="a" value="0" min="0"></td>
+    <td><input type="number" id="b" value="0" min="0"></td>
+    <td><input type="number" id="c" value="0" min="0"></td>
+    <td id="yearSum">0</td>
+    <td id="gradeRate">0%</td>
 </tr>
 </table>
 <p id="yearWarn" class="warning"></p>
@@ -92,16 +102,22 @@ button {
 <div class="table-container">
 <table>
 <tr>
-<th>嘉獎</th><th>申誡</th><th>記功</th><th>記過</th><th>大功</th><th>大過</th><th>獎懲調整小計</th>
+    <th>嘉獎<small>(-1%)</small></th>
+    <th>申誡<small>(+1%)</small></th>
+    <th>記功<small>(-3%)</small></th>
+    <th>記過<small>(+3%)</small></th>
+    <th>大功<small>(-6%)</small></th>
+    <th>大過<small>(+6%)</small></th>
+    <th>獎懲調整小計</th>
 </tr>
 <tr>
-<td><input type="number" id="d" value="0"></td>
-<td><input type="number" id="e" value="0"></td>
-<td><input type="number" id="f" value="0"></td>
-<td><input type="number" id="g" value="0"></td>
-<td><input type="number" id="h" value="0"></td>
-<td><input type="number" id="i" value="0"></td>
-<td id="rewardRate">0%</td>
+    <td><input type="number" id="d" value="0" min="0"></td>
+    <td><input type="number" id="e" value="0" min="0"></td>
+    <td><input type="number" id="f" value="0" min="0"></td>
+    <td><input type="number" id="g" value="0" min="0"></td>
+    <td><input type="number" id="h" value="0" min="0"></td>
+    <td><input type="number" id="i" value="0" min="0"></td>
+    <td id="rewardRate">0%</td>
 </tr>
 </table>
 </div>
@@ -112,28 +128,43 @@ button {
 <div class="table-container">
 <table id="resultTable" style="display:none;">
 <tr>
-<th>基本分攤金額</th>
-<th>調整比例（上限±15%）</th>
-<th>調整後分攤金額</th>
+    <th>基本分攤金額（元）</th>
+    <th>調整比例（上限 ±15%）</th>
+    <th>調整後分攤金額（元）</th>
 </tr>
 <tr>
-<td id="baseAmount"></td>
-<td id="totalRate"></td>
-<td id="finalAmount"></td>
+    <td id="baseAmount"></td>
+    <td id="totalRate"></td>
+    <td id="finalAmount"></td>
 </tr>
 </table>
 </div>
+
+<h2>說明</h2>
+<ol>
+<li>維修費用總額在新臺幣五萬元（含）以下者，分攤百分之二十。</li>
+<li>維修費用總額超過五萬元至十五萬元（含）以下者，除五萬元部分依前款規定辦理外，餘額分攤百分之十五。</li>
+<li>維修費用總額超過十五萬元者，除十五萬元部分依前二款規定辦理外，餘額分攤百分之十。</li>
+<li>
+    由區隊提出相關佐證資料或說明，經簽奉核准後，
+    得依責任人近五年考績及最近二年獎懲情形，
+    就其分攤金額酌予減免或加重；
+    其增減幅度合計不得超過原分攤金額之百分之十五。
+</li>
+</ol>
 
 <!-- 核章 -->
 <h3>核章欄</h3>
 <table>
 <tr>
-<th>區隊承辦單位</th>
-<th>區隊會辦單位</th>
-<th>隊長</th>
+    <th>區隊承辦單位</th>
+    <th>區隊會辦單位</th>
+    <th>隊長</th>
 </tr>
 <tr style="height:140px;">
-<td></td><td></td><td></td>
+    <td></td>
+    <td></td>
+    <td></td>
 </tr>
 </table>
 
@@ -145,7 +176,7 @@ function calculate() {
         return;
     }
 
-    // 基本金額
+    // 基本分攤金額
     let base = Math.min(amt, 50000) * 0.2;
     if (amt > 50000) base += Math.min(amt - 50000, 100000) * 0.15;
     if (amt > 150000) base += (amt - 150000) * 0.1;
@@ -158,11 +189,9 @@ function calculate() {
     let grade = yA * -0.01 + yB * 0.01 + yC * 0.03;
     gradeRate.innerText = (grade * 100).toFixed(1) + '%';
 
-    if (yearTotal !== 5) {
-        yearWarn.innerText = '⚠ 近五年考績合計應為 5 年';
-    } else {
-        yearWarn.innerText = '';
-    }
+    yearWarn.innerText = (yearTotal !== 5)
+        ? '⚠ 近五年考績合計應為 5 年'
+        : '';
 
     // 獎懲
     let reward =
@@ -175,8 +204,8 @@ function calculate() {
     let total = grade + reward;
     total = Math.max(Math.min(total, 0.15), -0.15);
 
-    totalRate.innerText = (total * 100).toFixed(1) + '%';
     baseAmount.innerText = Math.round(base).toLocaleString();
+    totalRate.innerText = (total * 100).toFixed(1) + '%';
     finalAmount.innerText = Math.round(base * (1 + total)).toLocaleString();
     resultTable.style.display = '';
 }
